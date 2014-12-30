@@ -446,7 +446,7 @@ string Statement_Dump::dump_compact_map_ql() const
     result += ")";
 
     if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
-      result += "->." + attributes.find("into")->second;
+      result += "->." + attributes.find("into_complete")->second;
   }
   else if (name_ == "query")
   {
@@ -668,7 +668,7 @@ string Statement_Dump::dump_bbox_map_ql() const
     result += ")";
 
     if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
-      result += "->." + attributes.find("into")->second;
+      result += "->." + attributes.find("into_complete")->second;
   }
   else if (name_ == "query")
   {
@@ -890,7 +890,7 @@ string Statement_Dump::dump_pretty_map_ql() const
     result += "\n)";
 
     if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
-      result += "->." + attributes.find("into")->second;
+      result += "->." + attributes.find("into_complete")->second;
   }
   else if (name_ == "query")
   {
