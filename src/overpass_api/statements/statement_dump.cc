@@ -431,8 +431,6 @@ string Statement_Dump::dump_compact_map_ql() const
   {
     result += name_;
 
-    if (attributes.find("from") != attributes.end() && attributes.find("from")->second != "_")
-      result += "." + attributes.find("from")->second;
     if (attributes.find("into") != attributes.end() && attributes.find("into")->second != "_")
       result += "->." + attributes.find("into")->second;
 
@@ -446,6 +444,9 @@ string Statement_Dump::dump_compact_map_ql() const
     for (++it; it != substatements.end(); ++it)
       result += (*it)->dump_compact_map_ql();
     result += ")";
+
+    if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
+      result += "->." + attributes.find("into")->second;
   }
   else if (name_ == "query")
   {
@@ -652,8 +653,6 @@ string Statement_Dump::dump_bbox_map_ql() const
   {
     result += name_;
 
-    if (attributes.find("from") != attributes.end() && attributes.find("from")->second != "_")
-      result += "." + attributes.find("from")->second;
     if (attributes.find("into") != attributes.end() && attributes.find("into")->second != "_")
       result += "->." + attributes.find("into")->second;
 
@@ -667,6 +666,9 @@ string Statement_Dump::dump_bbox_map_ql() const
     for (++it; it != substatements.end(); ++it)
       result += (*it)->dump_bbox_map_ql();
     result += ")";
+
+    if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
+      result += "->." + attributes.find("into")->second;
   }
   else if (name_ == "query")
   {
@@ -873,8 +875,6 @@ string Statement_Dump::dump_pretty_map_ql() const
   {
     result += name_;
 
-    if (attributes.find("from") != attributes.end() && attributes.find("from")->second != "_")
-      result += "." + attributes.find("from")->second;
     if (attributes.find("into") != attributes.end() && attributes.find("into")->second != "_")
       result += "->." + attributes.find("into")->second;
 
@@ -888,6 +888,9 @@ string Statement_Dump::dump_pretty_map_ql() const
     for (++it; it != substatements.end(); ++it)
       result += "\n" + indent((*it)->dump_pretty_map_ql());
     result += "\n)";
+
+    if (attributes.find("into_complete") != attributes.end() && attributes.find("into_complete")->second != "_")
+      result += "->." + attributes.find("into")->second;
   }
   else if (name_ == "query")
   {
