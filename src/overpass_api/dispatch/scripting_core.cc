@@ -248,3 +248,13 @@ meta_modes get_uses_meta_data()
 {
   return keep_attic;
 }
+
+void initialize()
+{
+  // initializes all static variables which are used throughout the application
+  // this way, we can safely reuse the existing interpreter process via fastcgi
+  stmt_factory_global = 0;
+  stmt_dump_factory_global = 0;
+  statement_stack_.clear();
+  (global_read_counter()) = 0;
+}
