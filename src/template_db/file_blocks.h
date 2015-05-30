@@ -627,24 +627,6 @@ uint32 File_Blocks< TIndex, TIterator, TRangeIterator >::answer_size
 }
 
 
-template< typename Iterator, typename Object >
-void rearrange_block(const Iterator& begin, Iterator& it, Object to_move)
-{
-  Iterator predecessor = it;
-  if (it != begin)
-    --predecessor;
-  while (to_move < *predecessor)
-  {
-    *it = *predecessor;
-    --it;
-    if (it == begin)
-      break;
-    --predecessor;
-  }
-  *it = to_move;
-}
-
-
 // Finds an appropriate block, removes it from the list of available blocks, and returns it
 template< typename TIndex, typename TIterator, typename TRangeIterator >
 uint32 File_Blocks< TIndex, TIterator, TRangeIterator >::allocate_block(uint32 data_size)
@@ -717,7 +699,9 @@ typename File_Blocks< TIndex, TIterator, TRangeIterator >::Discrete_Iterator
   if (compression_method == File_Blocks_Index< TIndex >::ZLIB_COMPRESSION)
   {
     target = buffer.ptr;
-    data_size = (Zlib_Deflate(1).compress(buf, *(uint32*)buf, target, block_size * max_size) - 1) / block_size + 1;
+    uint32 compressed_size = Zlib_Deflate(1).compress(buf, *(uint32*)buf, target, block_size * max_size);
+    data_size = (compressed_size - 1) / block_size + 1;
+    zero_padding((uint8*)target + compressed_size, block_size * data_size - compressed_size); 
   }
     
   uint32 pos = allocate_block(data_size);
