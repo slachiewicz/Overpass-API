@@ -111,8 +111,8 @@ class Regular_Expression_PCRE : public Regular_Expression
 
       if (rc < 0)
       {
-        if (rc != PCRE_ERROR_NOMATCH)
-          throw Regular_Expression_Error(1);
+        if (rc != PCRE_ERROR_NOMATCH && rc != PCRE_ERROR_BADUTF8)         //ignore bad utf8 for now
+          throw Regular_Expression_Error(rc);
         else
           return false;
       }
