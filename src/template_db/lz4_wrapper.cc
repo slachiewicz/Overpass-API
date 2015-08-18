@@ -69,7 +69,7 @@ int LZ4_Inflate::decompress(const void* in, int in_size, void* out, int out_buff
       throw Error (1);
 
     std::memcpy ((char*) out, (const char*) in + 4, in_buffer_size);
-    ret = in_buffer_size * -1;
+    ret = in_buffer_size;
   }
   return ret;
 }
