@@ -142,7 +142,7 @@ public:
 template< typename Id_Type, typename Iterator, typename Key_Regex, typename Val_Regex >
 void filter_id_list(
     std::vector< std::pair< Id_Type, Uint31_Index > >& new_ids, bool& filtered,
-    Iterator begin, Iterator end, const Key_Regex& key_regex, const Val_Regex& val_regex)
+    const Iterator& begin, const Iterator& end, const Key_Regex& key_regex, const Val_Regex& val_regex)
 {
   std::vector< std::pair< Id_Type, Uint31_Index > > old_ids;
   old_ids.swap(new_ids);
@@ -162,7 +162,7 @@ void filter_id_list(
 template< typename Id_Type, typename Iterator, typename Key_Regex, typename Val_Regex >
 void filter_id_list(
     std::vector< Id_Type >& new_ids, bool& filtered,
-    Iterator begin, Iterator end, const Key_Regex& key_regex, const Val_Regex& val_regex)
+    const Iterator& begin, const Iterator& end, const Key_Regex& key_regex, const Val_Regex& val_regex)
 {
   std::vector< Id_Type > old_ids;
   old_ids.swap(new_ids);
