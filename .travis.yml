@@ -4,11 +4,11 @@ compiler:
   - gcc
 
 before_install:
+  - sudo add-apt-repository ppa: gezakovacs/lz4
+  - sudo apt-get update  
   - sudo apt-get install expat libexpat1-dev 
 #  - sudo pip install cpp-coveralls
 # Travis uses some older Ubuntu version...
-  - sudo add-apt-repository ppa: gezakovacs/lz4
-  - sudo apt-get update
   - sudo apt-get install liblz4-dev
   
 before_script:  
