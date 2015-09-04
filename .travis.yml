@@ -2,14 +2,24 @@ language: cpp
 
 compiler:
   - gcc
+  
+sudo: false  
 
-before_install:
-  - sudo add-apt-repository ppa:gezakovacs/lz4 -y
-  - sudo apt-get update  -q 
-  - sudo apt-get install -y expat libexpat1-dev 
-#  - sudo pip install cpp-coveralls
+#before_install:
+#  - sudo add-apt-repository ppa:gezakovacs/lz4 -y
+#  - sudo apt-get update  -q 
+#  - sudo apt-get install -y expat libexpat1-dev 
+##  - sudo pip install cpp-coveralls
 # Travis uses some older Ubuntu version...
-  - sudo apt-get install -y liblz4-dev
+#  - sudo apt-get install -y liblz4-dev
+
+addons:
+  apt:
+    packages:
+    - expat
+    - libexpat1-dev
+    - liblz4-dev
+
   
 before_script:  
   - mkdir -p $HOME/overpass
