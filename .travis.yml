@@ -10,7 +10,7 @@ sudo: false
 #  - sudo apt-get update  -q 
 #  - sudo apt-get install -y expat libexpat1-dev 
 ##  - sudo pip install cpp-coveralls
-# Travis uses some older Ubuntu version...
+# Travis uses some older Ubuntu version... 
 #  - sudo apt-get install -y liblz4-dev
 
 addons:
