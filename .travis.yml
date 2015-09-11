@@ -10,6 +10,7 @@ before_install:
 #  - sudo pip install cpp-coveralls
 # Travis uses some older Ubuntu version...
   - sudo apt-get install -y liblz4-dev
+  - sudo pip install cpp-coveralls
   
 before_script:  
   - mkdir -p $HOME/overpass
@@ -24,8 +25,8 @@ before_script:
   - popd
   - mkdir -p build
   - cd build
-  - ../src/configure CXXFLAGS="-O3" --prefix=$EXEC_DIR
-#  - ../src/configure CXXFLAGS="-ggdb -fprofile-arcs -ftest-coverage" LDFLAGS="-lgcov" --prefix=$EXEC_DIR
+#  - ../src/configure CXXFLAGS="-O3" --prefix=$EXEC_DIR
+  - ../src/configure CXXFLAGS="-ggdb -fprofile-arcs -ftest-coverage" LDFLAGS="-lgcov" --prefix=$EXEC_DIR
 
 script:  
   - make -j3
@@ -34,9 +35,9 @@ script:
   - cd ../osm-3s_testing
   - ../src/test-bin/run_testsuite.sh 200
 
-#after_success:
-#  - cd ../build
-#  - coveralls
+after_success:
+  - cd ../build
+  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
 
 branches:
   only:
