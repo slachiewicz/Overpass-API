@@ -13,7 +13,6 @@ before_install:
   - sudo pip install cpp-coveralls
   
 before_script:  
-  - mkdir -p $HOME/overpass
   - pushd src/
   - chmod u+x test-bin/*.sh
   - autoscan
@@ -31,12 +30,12 @@ before_script:
 script:  
   - make -j3
   - cp -R test-bin/ bin/ cgi-bin/ ../src
-  - export PATH=$PATH:$HOME/overpass/bin:$HOME/overpass/cgi-bin:$HOME/overpass/test-bin  
+  - export PATH=$PATH:$HOME/src/bin:$HOME/src/cgi-bin:$HOME/src/test-bin  
   - cd ../osm-3s_testing
   - ../src/test-bin/run_testsuite.sh 200
 
 after_success:
-  - cd ~/overpass
+  - cd $HOME
   - coveralls -b build --exclude lib --exclude tests --gcov-options '\-lp'
 
 branches:
