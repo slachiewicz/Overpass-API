@@ -103,7 +103,7 @@ class Regular_Expression_PCRE : public Regular_Expression
 
     bool matches(const std::string& line) const
     {
-      int options;
+      int options = 0;
       int startOffset = 0;
       int outVec[1];
 
