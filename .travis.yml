@@ -36,10 +36,10 @@ script:
   - ../src/test-bin/run_testsuite.sh 200
 
 after_success:
-  - cd ../build
-  - ln -s ../src/ .
-  - ln -s ../src/ overpass_api/src
-  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
+#  - cd ../build
+#  - ln -s ../src/ .
+#  - ln -s ../src/ overpass_api/src
+  - coveralls -b build --exclude lib --exclude tests --gcov-options '\-lp'
 
 branches:
   only:
