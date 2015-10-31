@@ -50,7 +50,7 @@ struct OSM_File_Properties : public File_Properties
   
   uint32 get_block_size() const { return block_size/8; }
   uint32 get_max_size() const { return 8; }
-  uint32 get_compression_method() const { return File_Blocks_Index< TVal >::LZ4_COMPRESSION; }
+  uint32 get_compression_method() const { return basic_settings().compression_method; }
   uint32 get_map_block_size() const { return map_block_size/8; }
   uint32 get_map_max_size() const { return 8; }
   
@@ -95,7 +95,9 @@ Basic_Settings::Basic_Settings()
 
   base_directory("./"),
   logfile_name("transactions.log"),
-  shared_name_base("/osm3s_v0.7.54_mmd")
+  shared_name_base("/osm3s_v0.7.54_mmd"),
+  
+  compression_method(File_Blocks_Index< Uint31_Index >::LZ4_COMPRESSION)
 {}
 
 Basic_Settings& basic_settings()
