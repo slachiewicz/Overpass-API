@@ -72,9 +72,11 @@ int main(int argc, char* argv[])
 	basic_settings().compression_method = File_Blocks_Index< Uint31_Index >::NO_COMPRESSION;
       else if (string(argv[argpos]).substr(21) == "gz")
 	basic_settings().compression_method = File_Blocks_Index< Uint31_Index >::ZLIB_COMPRESSION;
+      else if (string(argv[argpos]).substr(21) == "lz4")
+	basic_settings().compression_method = File_Blocks_Index< Uint31_Index >::LZ4_COMPRESSION;
       else
       {
-        cerr<<"For --compression_method, please use \"no\" or \"gz\" as value.\n";
+        cerr<<"For --compression_method, please use \"no\", \"lz4\" or \"gz\" as value.\n";
         abort = true;
       }
     }
@@ -92,7 +94,7 @@ int main(int argc, char* argv[])
   }
   if (abort)
   {
-    cerr<<"Usage: "<<argv[0]<<" [--db-dir=DIR] [--version=VER] [--meta|--keep-attic] [--compression_method=(no|gz)]\n";
+    cerr<<"Usage: "<<argv[0]<<" [--db-dir=DIR] [--version=VER] [--meta|--keep-attic] [--compression_method=(no|lz4|gz)]\n";
     return 0;
   }
   
