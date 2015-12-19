@@ -18,7 +18,7 @@ AC_PROG_MAKE_SET
 
 # Checks for libraries.
 AC_CHECK_LIB([expat], [XML_Parse])
-AC_SEARCH_LIBS([shm_open], [rt])
+#AC_SEARCH_LIBS([shm_open], [rt])
 
 dnl define a m4 macro to check for perl regular expresion support
 AC_DEFUN([CHECK_LIB_PCRE],[dnl

@@ -4,13 +4,7 @@ compiler:
   - gcc
 
 before_install:
-  - sudo add-apt-repository ppa:gezakovacs/lz4 -y
-  - sudo apt-get update  -q 
-  - sudo apt-get install -y expat libexpat1-dev 
-#  - sudo pip install cpp-coveralls
-# Travis uses some older Ubuntu version...
-  - sudo apt-get install -y liblz4-dev
-  - sudo pip install cpp-coveralls
+   - brew install lz4 pcre
   
 before_script:  
   - mkdir -p $HOME/overpass
@@ -19,14 +13,13 @@ before_script:
   - autoscan
   - aclocal
   - autoheader
-  - libtoolize
+  - glibtoolize
   - automake --add-missing
   - autoconf
   - popd
   - mkdir -p build
   - cd build
-#  - ../src/configure CXXFLAGS="-O3" --prefix=$EXEC_DIR
-  - ../src/configure CXXFLAGS="-ggdb -fprofile-arcs -ftest-coverage" LDFLAGS="-lgcov" --prefix=$EXEC_DIR
+  - ../src/configure CXXFLAGS="-O3" CPPFLAGS="-DNATIVE_LARGE_FILES" --prefix=$EXEC_DIR
 
 script:  
   - make -j3
@@ -34,18 +27,15 @@ script:
   - cp -R test-bin/ bin/ cgi-bin/ ../src
   - export PATH=$PATH:$HOME/overpass/bin:$HOME/overpass/cgi-bin:$HOME/overpass/test-bin  
   - cd ../osm-3s_testing
-  - ../src/test-bin/run_testsuite.sh 200
+#  - ../src/test-bin/run_testsuite.sh 200
 
-after_success:
-  - cd ..
-  - coveralls -b build --exclude lib --exclude tests --gcov-options '\-lp'
 
 branches:
   only:
-    - test754
+    - test754_osx
 
 os:
-  - linux
+  - osx
   
 env:
   - EXEC_DIR=$HOME/overpass
