@@ -1,0 +1,41 @@
+language: cpp
+
+compiler:
+  - gcc
+
+ 
+before_script:  
+  - mkdir -p $HOME/overpass
+  - pushd src/
+  - chmod u+x test-bin/*.sh
+  - autoscan
+  - aclocal
+  - autoheader
+  - glibtoolize
+  - automake --add-missing
+  - autoconf
+  - popd
+  - mkdir -p build
+  - cd build
+  - ../src/configure CXXFLAGS="-O3" CPPFLAGS="-DNATIVE_LARGE_FILES" --prefix=$EXEC_DIR
+
+script:  
+  - make -j3
+  - make install
+  - cp -R test-bin/ bin/ cgi-bin/ ../src
+  - export PATH=$PATH:$HOME/overpass/bin:$HOME/overpass/cgi-bin:$HOME/overpass/test-bin  
+  - cd ../osm-3s_testing
+  - ../src/test-bin/run_testsuite.sh 200
+
+
+branches:
+  only:
+    - test752_macosx
+
+os:
+  - osx
+  
+env:
+  - EXEC_DIR=$HOME/overpass
+
+
