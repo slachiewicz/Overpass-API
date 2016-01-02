@@ -18,7 +18,7 @@ AC_PROG_MAKE_SET
 
 # Checks for libraries.
 AC_CHECK_LIB([expat], [XML_Parse])
-AC_SEARCH_LIBS([shm_open], [rt])
+#AC_SEARCH_LIBS([shm_open], [rt])
 
 # Checks for header files.
 AC_TYPE_MODE_T
