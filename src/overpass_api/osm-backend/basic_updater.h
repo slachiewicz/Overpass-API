@@ -145,7 +145,8 @@ std::map< Uint31_Index, std::set< Element_Skeleton > > get_existing_skeletons
       it(db.discrete_begin(req.begin(), req.end())); !(it == db.discrete_end()); ++it)
   {
     if (binary_search(ids_with_position.begin(), ids_with_position.end(),
-        make_pair(it.object().id, 0), comp))
+//        make_pair(it.object().id, 0), comp))
+        make_pair(Element_Skeleton::get_id(it.object_data()), 0), comp))
       result[it.index()].insert(it.object());
   }
 
