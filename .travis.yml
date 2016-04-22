@@ -19,7 +19,7 @@ before_script:
   - popd
   - mkdir -p build
   - cd build
-  - ../src/configure CXXFLAGS="-O3" CPPFLAGS="-DNATIVE_LARGE_FILES" --prefix=$EXEC_DIR
+  - ../src/configure CXXFLAGS="-O3 -g -std=c++11 -Wall -pedantic" CPPFLAGS="-DNATIVE_LARGE_FILES" --prefix=$EXEC_DIR
 
 script:  
   - make V=0 -j3 install
