@@ -22,8 +22,7 @@ before_script:
   - ../src/configure CXXFLAGS="-O3" CPPFLAGS="-DNATIVE_LARGE_FILES" --prefix=$EXEC_DIR
 
 script:  
-  - make V=0 -j3
-  - make install
+  - make V=0 -j3 install
   - cp -R test-bin/ bin/ cgi-bin/ ../src
   - export PATH=$PATH:$HOME/overpass/bin:$HOME/overpass/cgi-bin:$HOME/overpass/test-bin  
   - cd ../osm-3s_testing
