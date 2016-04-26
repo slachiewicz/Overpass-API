@@ -95,12 +95,12 @@ void clone_map_file(const File_Properties& file_prop, Transaction& transaction, 
     {
       if (src_idx.blocks[i].pos != src_idx.npos)
       {
-	for (uint32 j = 0; j < src_idx.get_block_size()/TIndex::max_size_of(); ++j)
+	for (uint32 j = 0; j < src_idx.get_block_size()*src_idx.get_max_size()/TIndex::max_size_of(); ++j)
 	{
 	  TIndex val =
-	      src_file.get(i*(src_idx.get_block_size()/TIndex::max_size_of()) + j);
+	      src_file.get(i*(src_idx.get_block_size()*src_idx.get_max_size()/TIndex::max_size_of()) + j);
 	  if (!(val == TIndex(uint32(0))))
-	    dest_file.put(i*(src_idx.get_block_size()/TIndex::max_size_of()) + j, val);
+	    dest_file.put(i*(src_idx.get_block_size()*src_idx.get_max_size()/TIndex::max_size_of()) + j, val);
 	}
       }
     }
