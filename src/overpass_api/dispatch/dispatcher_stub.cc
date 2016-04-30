@@ -67,6 +67,7 @@ string de_escape(string input)
 
 void set_limits(uint32 time, uint64 space)
 {
+  /*
   rlimit limit;
   
   int result = getrlimit(RLIMIT_CPU, &limit);
@@ -84,6 +85,7 @@ void set_limits(uint32 time, uint64 space)
     limit.rlim_max = space;
     result = setrlimit(RLIMIT_AS, &limit);
   }
+  */
 }
 
 
