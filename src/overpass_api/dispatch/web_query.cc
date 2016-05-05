@@ -185,6 +185,7 @@ int handle_request(const std::string & content)
     else
       temp<<"open64: "<<e.error_number<<' '<<strerror(e.error_number)<<' '<<e.filename<<' '<<e.origin;
     error_output.runtime_error(temp.str());
+    return -1;
   }
   catch(Resource_Error e)
   {
@@ -196,8 +197,11 @@ int handle_request(const std::string & content)
       temp<<"Query run out of memory in \""<<e.stmt_name<<"\" at line "
           <<e.line_number<<" using about "<<e.size/(1024*1024)<<" MB of RAM.";
     error_output.runtime_error(temp.str());
+    return -2;
   }
-  catch(Exit_Error e) {}
+  catch(Exit_Error e) {
+    return -3;
+  }
 
   return 0;
 }
@@ -275,15 +279,26 @@ int main(int argc, char *argv[])
 
       string content = get_request_content(request);
 
-      // ugly hack!
-      setenv("REQUEST_METHOD", FCGX_GetParam("REQUEST_METHOD", request.envp), true);
-      setenv("HTTP_ACCESS_CONTROL_REQUEST_HEADERS", FCGX_GetParam("HTTP_ACCESS_CONTROL_REQUEST_HEADERS", request.envp), true);
-      setenv("HTTP_ORIGIN", FCGX_GetParam("HTTP_ORIGIN", request.envp), true);
-      setenv("REMOTE_ADDR", FCGX_GetParam("REMOTE_ADDR", request.envp), true);
-      setenv("QUERY_STRING", FCGX_GetParam("QUERY_STRING", request.envp), true);
+      char* request_method = FCGX_GetParam("REQUEST_METHOD", request.envp);
+      char* access_control_headers = FCGX_GetParam("HTTP_ACCESS_CONTROL_REQUEST_HEADERS", request.envp);
+      char* http_origin = FCGX_GetParam("HTTP_ORIGIN", request.envp);
+      char* remote_addr = FCGX_GetParam("REMOTE_ADDR", request.envp);
+      char* query_string = FCGX_GetParam("QUERY_STRING", request.envp);
+
+      setenv("REQUEST_METHOD", request_method != NULL ? request_method : "", true);
+      setenv("HTTP_ACCESS_CONTROL_REQUEST_HEADERS", access_control_headers != NULL ? access_control_headers : "" , true);
+      setenv("HTTP_ORIGIN", http_origin != NULL ? http_origin : "", true);
+      setenv("REMOTE_ADDR", remote_addr != NULL ? remote_addr : "", true);
+      setenv("QUERY_STRING", query_string != NULL ? query_string : "", true);
 
       initialize();
-      handle_request(content);
+      int ret = handle_request(content);
+
+      if (ret < 0) {
+        FCGX_ShutdownPending();
+        FCGX_Finish_r(&request);
+        break;
+      }
     }
 
     // restore stdio streambufs
