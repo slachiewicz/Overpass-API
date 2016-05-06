@@ -1739,4 +1739,6 @@ Has_Kv_Statement::~Has_Kv_Statement()
 {
   if (regex)
     delete regex;
+  if (key_regex)
+    delete key_regex;
 }

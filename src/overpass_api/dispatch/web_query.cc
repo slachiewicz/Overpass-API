@@ -46,7 +46,7 @@
 #include "fcgio.h"
 
 
-int handle_request(const std::string & content)
+int handle_request(const std::string & content, bool is_cgi)
 {
   Web_Output error_output(Error_Output::ASSISTING);
   Statement::set_error_output(&error_output);
@@ -57,7 +57,7 @@ int handle_request(const std::string & content)
     string template_name = "default.wiki";
     bool redirect = true;
     string xml_raw(get_xml_cgi(content, &error_output, 16*1024*1024, url, redirect, template_name,
-	error_output.http_method, error_output.allow_headers, error_output.has_origin, FCGX_IsCGI()));
+	error_output.http_method, error_output.allow_headers, error_output.has_origin, is_cgi));
     
     if (error_output.display_encoding_errors())
       return 0;
@@ -165,7 +165,7 @@ int handle_request(const std::string & content)
         error_output.write_footer();
     }
   }
-  catch(File_Error e)
+  catch(const File_Error & e)
   {
     ostringstream temp;
     if (e.origin.substr(e.origin.size()-9) == "::timeout")
@@ -189,7 +189,7 @@ int handle_request(const std::string & content)
     error_output.runtime_error(temp.str());
     return -1;
   }
-  catch(Resource_Error e)
+  catch(const Resource_Error & e)
   {
     ostringstream temp;
     if (e.timed_out)
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 {
   if (FCGX_IsCGI())
   {
-    handle_request("");
+    handle_request("", FCGX_IsCGI());
   }
   else
   {
@@ -309,13 +309,13 @@ int main(int argc, char *argv[])
       setenv("QUERY_STRING", query_string != NULL ? query_string : "", true);
 
       initialize();
-      int ret = handle_request(content);
+      int ret = handle_request(content, FCGX_IsCGI());
 
-      if (ret < 0) {
-        FCGX_ShutdownPending();
-        FCGX_Finish_r(&request);
-        break;
-      }
+//      if (ret < 0) {
+//        FCGX_ShutdownPending();
+//        FCGX_Finish_r(&request);
+//        break;
+//      }
     }
 
     // restore stdio streambufs
