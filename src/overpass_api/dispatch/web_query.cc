@@ -214,7 +214,6 @@ int handle_request(const std::string & content, bool is_cgi)
   {
     error_output.runtime_error(std::string("Query failed with the exception: ") + e.what());
     return -4;
-
   }
   catch(Exit_Error e) {
     return -5;
@@ -311,11 +310,6 @@ int main(int argc, char *argv[])
       initialize();
       int ret = handle_request(content, FCGX_IsCGI());
 
-//      if (ret < 0) {
-//        FCGX_ShutdownPending();
-//        FCGX_Finish_r(&request);
-//        break;
-//      }
     }
 
     // restore stdio streambufs

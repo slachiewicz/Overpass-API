@@ -143,12 +143,10 @@ bin_osm3s_query_LDADD = libcore.la libdata.la -lz -llz4
 bin_dispatcher_SOURCES = template_db/dispatcher.cc template_db/file_tools.cc template_db/types.cc overpass_api/dispatch/dispatcher_server.cc
 bin_dispatcher_LDADD = libdispatcher.la libfrontend.la libsettings.la
 
-
 cgi_bin_interpreter_SOURCES = ${statements_cc} overpass_api/dispatch/web_query.cc overpass_api/dispatch/scripting_core.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
 cgi_bin_interpreter_LDADD = libcore.la libdata.la -lz -llz4 -lfcgi++ -lfcgi
 cgi_bin_timestamp_SOURCES = overpass_api/dispatch/db_timestamp.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
-cgi_bin_timestamp_LDADD = libdispatcher.la libsettings.la libweboutput.la -lz -llz4
-
+cgi_bin_timestamp_LDADD = libdispatcher.la libsettings.la libweboutput.la -lz -llz4 -lfcgi++ -lfcgi
 
 escape_xml_cc = expat/escape_xml.cc
 
