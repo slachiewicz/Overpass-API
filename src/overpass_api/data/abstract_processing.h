@@ -41,6 +41,9 @@ class And_Predicate
     {
       return (predicate_a.match(id) && predicate_b.match(id));
     }
+    bool id_query_allowed() const {
+      return predicate_a.id_query_allowed() && predicate_b.id_query_allowed();
+    }
     
   private:
     TPredicateA predicate_a;
@@ -60,6 +63,9 @@ class Or_Predicate
     bool match(const typename TObject::Id_Type id) const
     {
       return (predicate_a.match(id) || predicate_b.match(id));
+    }
+    bool id_query_allowed() const {
+      return predicate_a.id_query_allowed() && predicate_b.id_query_allowed();
     }
     
   private:
@@ -81,6 +87,7 @@ class Not_Predicate
     {
       return (!predicate_a.match(id));
     }
+    bool id_query_allowed() const { return predicate_a.id_query_allowed(); }
     
   private:
     TPredicateA predicate_a;
@@ -93,6 +100,7 @@ class Trivial_Predicate
     Trivial_Predicate() {}
     bool match(const TObject& obj) const { return true; }
     bool match(const typename TObject::Id_Type id) const { return true; }
+    bool id_query_allowed() const { return true; }
 };
 
 //-----------------------------------------------------------------------------
@@ -111,6 +119,7 @@ class Id_Predicate
     {
       return binary_search(ids.begin(), ids.end(), id);
     }
+    bool id_query_allowed() const { return true; }
     
   private:
     const vector< typename TObject::Id_Type >& ids;
@@ -168,6 +177,7 @@ public:
   {
     return has_a_child_with_id(obj, ids, child_type);
   }
+  bool id_query_allowed() const { return false; }
   
 private:
   const vector< Uint64 >& ids;
@@ -184,6 +194,7 @@ public:
   {
     return has_a_child_with_id_and_role(obj, ids, child_type, role_id);
   }
+  bool id_query_allowed() const { return false; }
   
 private:
   const vector< Uint64 >& ids;
@@ -201,6 +212,7 @@ public:
   {
     return has_a_child_with_id(obj, ids);
   }
+  bool id_query_allowed() const { return false; }
   
 private:
   const vector< Node::Id_Type >& ids;

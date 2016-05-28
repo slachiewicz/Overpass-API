@@ -357,6 +357,7 @@ void collect_items_range(const Statement* stmt, Resource_Manager& rman,
 		   const Container& req, const Predicate& predicate,
 		   map< Index, vector< Object > >& result)
 {
+  bool id_query_allowed = predicate.id_query_allowed();
   uint32 count = 0;
   Block_Backend< Index, Object, typename Container::const_iterator > db
       (rman.get_transaction()->data_index(&file_properties));
@@ -370,8 +371,16 @@ void collect_items_range(const Statement* stmt, Resource_Manager& rman,
       count = 0;
       rman.health_check(*stmt, 0, eval_map(result));
     }
-    if (predicate.match(it.apply_func(&Object::get_id)))
-      result[it.index()].push_back(it.object());
+    if (id_query_allowed)
+    {
+      if (predicate.match(it.apply_func(&Object::get_id)))
+        result[it.index()].push_back(it.object());
+    }
+    else
+    {
+      if (predicate.match(it.object()))
+        result[it.index()].push_back(it.object());
+    }
   }
 }
 
