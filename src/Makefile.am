@@ -133,20 +133,20 @@ libweboutput_la_LIBADD = libfrontend.la
 osm_updater_cc = overpass_api/osm-backend/meta_updater.cc overpass_api/osm-backend/basic_updater.cc overpass_api/osm-backend/node_updater.cc overpass_api/osm-backend/way_updater.cc overpass_api/osm-backend/relation_updater.cc overpass_api/osm-backend/osm_updater.cc expat/escape_xml.cc
 
 
-bin_update_database_SOURCES = ${osm_updater_cc} overpass_api/osm-backend/update_database.cc template_db/types.cc template_db/zlib_wrapper.cc
-bin_update_database_LDADD = libdata.la libdispatcher.la libexpatwrapper.la liboutput.la libsettings.la -lz
-bin_update_from_dir_SOURCES = ${osm_updater_cc} overpass_api/osm-backend/update_from_dir.cc template_db/types.cc template_db/zlib_wrapper.cc
-bin_update_from_dir_LDADD = libdata.la libdispatcher.la libexpatwrapper.la liboutput.la libsettings.la -lz
-bin_osm3s_query_SOURCES = ${statements_cc} overpass_api/frontend/console_output.cc overpass_api/dispatch/osm3s_query.cc overpass_api/osm-backend/clone_database.cc overpass_api/dispatch/scripting_core.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc
-bin_osm3s_query_LDADD = libcore.la libdata.la -lz
+bin_update_database_SOURCES = ${osm_updater_cc} overpass_api/osm-backend/update_database.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
+bin_update_database_LDADD = libdata.la libdispatcher.la libexpatwrapper.la liboutput.la libsettings.la -lz -llz4
+bin_update_from_dir_SOURCES = ${osm_updater_cc} overpass_api/osm-backend/update_from_dir.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
+bin_update_from_dir_LDADD = libdata.la libdispatcher.la libexpatwrapper.la liboutput.la libsettings.la -lz -llz4
+bin_osm3s_query_SOURCES = ${statements_cc} overpass_api/frontend/console_output.cc overpass_api/dispatch/osm3s_query.cc overpass_api/osm-backend/clone_database.cc overpass_api/dispatch/scripting_core.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
+bin_osm3s_query_LDADD = libcore.la libdata.la -lz -llz4
 bin_dispatcher_SOURCES = template_db/dispatcher.cc template_db/file_tools.cc template_db/types.cc overpass_api/dispatch/dispatcher_server.cc
 bin_dispatcher_LDADD = libdispatcher.la libfrontend.la libsettings.la
 
 
-cgi_bin_interpreter_SOURCES = ${statements_cc} overpass_api/dispatch/web_query.cc overpass_api/dispatch/scripting_core.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc
-cgi_bin_interpreter_LDADD = libcore.la libdata.la -lz
-cgi_bin_timestamp_SOURCES = overpass_api/dispatch/db_timestamp.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc
-cgi_bin_timestamp_LDADD = libdispatcher.la libsettings.la libweboutput.la -lz
+cgi_bin_interpreter_SOURCES = ${statements_cc} overpass_api/dispatch/web_query.cc overpass_api/dispatch/scripting_core.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
+cgi_bin_interpreter_LDADD = libcore.la libdata.la -lz -llz4
+cgi_bin_timestamp_SOURCES = overpass_api/dispatch/db_timestamp.cc overpass_api/dispatch/dispatcher_stub.cc template_db/types.cc template_db/zlib_wrapper.cc template_db/lz4_wrapper.cc
+cgi_bin_timestamp_LDADD = libdispatcher.la libsettings.la libweboutput.la -lz -llz4
 
 
 escape_xml_cc = expat/escape_xml.cc
@@ -168,7 +168,7 @@ bin_translate_xapi_LDADD =
 bin_process_augmented_diffs_SOURCES = expat/process_augmented_diffs.cc expat/escape_xml.cc
 bin_process_augmented_diffs_LDADD = libexpatwrapper.la
 
-distdir = osm-3s_v0.7.52
+distdir = osm-3s_v0.7.55
 
 nobase_dist_HEADERS = pt_diagrams/test_output.h pt_diagrams/processed_input.h pt_diagrams/read_input.h expat/map_ql_input.h expat/escape_xml.h expat/expat_justparse_interface.h overpass_api/frontend/cgi-helper.h overpass_api/frontend/web_output.h overpass_api/frontend/user_interface.h overpass_api/frontend/output.h overpass_api/frontend/console_output.h overpass_api/frontend/print_target.h overpass_api/frontend/map_ql_parser.h overpass_api/data/abstract_processing.h overpass_api/data/collect_items.h overpass_api/data/filter_ids_by_tags.h overpass_api/data/regular_expression.h overpass_api/data/geometry.h overpass_api/data/collect_members.h overpass_api/data/filter_by_tags.h overpass_api/data/filenames.h overpass_api/dispatch/dispatcher_stub.h overpass_api/dispatch/resource_manager.h overpass_api/dispatch/scripting_core.h overpass_api/core/settings.h overpass_api/core/type_tags.h overpass_api/core/datatypes.h overpass_api/core/type_relation.h overpass_api/core/type_area.h overpass_api/core/basic_types.h overpass_api/core/type_way.h overpass_api/core/type_node.h overpass_api/core/index_computations.h overpass_api/statements/user.h overpass_api/statements/map_to_area.h overpass_api/statements/coord_query.h overpass_api/statements/recurse.h overpass_api/statements/difference.h overpass_api/statements/bbox_query.h overpass_api/statements/polygon_query.h overpass_api/statements/print.h overpass_api/statements/query.h overpass_api/statements/union.h overpass_api/statements/item.h overpass_api/statements/make_area.h overpass_api/statements/around.h overpass_api/statements/pivot.h overpass_api/statements/id_query.h overpass_api/statements/area_query.h overpass_api/statements/statement.h overpass_api/statements/osm_script.h overpass_api/statements/newer.h overpass_api/statements/meta_collector.h overpass_api/statements/statement_dump.h overpass_api/statements/foreach.h overpass_api/statements/changed.h overpass_api/osm-backend/basic_updater.h overpass_api/osm-backend/osm_updater.h overpass_api/osm-backend/clone_database.h overpass_api/osm-backend/node_updater.h overpass_api/osm-backend/way_updater.h overpass_api/osm-backend/tags_updater.h overpass_api/osm-backend/meta_updater.h overpass_api/osm-backend/area_updater.h overpass_api/osm-backend/relation_updater.h template_db/dispatcher_client.h template_db/file_blocks_index.h template_db/file_blocks.h template_db/block_backend.h template_db/dispatcher.h template_db/zlib_wrapper.h template_db/transaction.h template_db/random_file_index.h template_db/types.h template_db/random_file.h template_db/file_tools.h lib/overpass.h
 

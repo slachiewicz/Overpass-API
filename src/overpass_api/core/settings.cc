@@ -39,7 +39,7 @@ struct OSM_File_Properties : public File_Properties
   OSM_File_Properties(const string& file_base_name_, uint32 block_size_,
 		      uint32 map_block_size_)
     : file_base_name(file_base_name_), block_size(block_size_),
-      map_block_size(map_block_size_ > 0 ? map_block_size_*TVal::max_size_of() : 0) {}
+      map_block_size(map_block_size_ > 0 ? map_block_size_ : 0) {}
   
   const string& get_file_name_trunk() const { return file_base_name; }
   
@@ -48,10 +48,10 @@ struct OSM_File_Properties : public File_Properties
   const string& get_id_suffix() const { return basic_settings().ID_SUFFIX; }  
   const string& get_shadow_suffix() const { return basic_settings().SHADOW_SUFFIX; }
   
-  uint32 get_block_size() const { return block_size/4; }
-  uint32 get_max_size() const { return 4; }
+  uint32 get_block_size() const { return block_size/8; }
+  uint32 get_max_size() const { return 8; }
   uint32 get_compression_method() const { return basic_settings().compression_method; }
-  uint32 get_map_block_size() const { return map_block_size; }
+  uint32 get_map_block_size() const { return map_block_size/8; }
   
   vector< bool > get_data_footprint(const string& db_dir) const
   {
@@ -94,9 +94,9 @@ Basic_Settings::Basic_Settings()
 
   base_directory("./"),
   logfile_name("transactions.log"),
-  shared_name_base("/osm3s_v0.7.52"),
+  shared_name_base("/osm3s_v0.7.55_mmd"),
   
-  compression_method(File_Blocks_Index< Uint31_Index >::ZLIB_COMPRESSION)
+  compression_method(File_Blocks_Index< Uint31_Index >::LZ4_COMPRESSION)
 {}
 
 Basic_Settings& basic_settings()
