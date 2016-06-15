@@ -57,7 +57,7 @@ class Polygon_Constraint : public Query_Constraint
 
 bool Polygon_Constraint::delivers_data(Resource_Manager& rman)
 {
-  return false;
+  return polygon && !polygon->covers_large_area();
 }
 
 
@@ -227,6 +227,27 @@ void add_segment_blocks(vector< Aligned_Segment >& segments)
 Generic_Statement_Maker< Polygon_Query_Statement > Polygon_Query_Statement::statement_maker("polygon-query");
 
 
+bool covers_large_area(const std::vector< std::pair< double, double > >& edges)
+{
+  double max_lat = -100.;
+  double min_lat = 100.;
+  double max_lon = -200.;
+  double min_lon = 200.;
+  
+  for (std::vector< std::pair< double, double > >::const_iterator it = edges.begin(); it != edges.end(); ++it)
+  {
+    max_lat = std::max(max_lat, it->first);
+    min_lat = std::min(min_lat, it->first);
+    max_lon = std::max(max_lon, it->second);
+    min_lon = std::min(min_lon, it->second);
+  }
+  
+  if (max_lat < min_lat || max_lon < min_lon)
+    return false;
+  return (max_lat - min_lat) * (max_lon - min_lon) > 1.;
+}
+
+
 Polygon_Query_Statement::Polygon_Query_Statement
     (int line_number_, const map< string, string >& input_attributes, Query_Constraint* bbox_limitation)
     : Output_Statement(line_number_)
@@ -262,6 +283,8 @@ Polygon_Query_Statement::Polygon_Query_Statement
           " the only allowed values for longitude are floats between -180.0 and 180.0.");
   }
   
+  //covers_large_area_ = ::covers_large_area(edges);               // TODO
+
   if (tokens.size() % 2 == 0 && tokens.size() / 2)
   {
     for (vector<double>::size_type i = 2; i < tokens.size(); i += 2)
