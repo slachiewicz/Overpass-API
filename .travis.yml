@@ -1,0 +1,46 @@
+sudo: required
+dist: trusty
+
+language: cpp
+
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update  -q 
+  - sudo apt-get install -y expat libexpat1-dev liblz4-dev libfcgi-dev
+  
+before_script:  
+  - mkdir -p $HOME/overpass
+  - pushd src/
+  - chmod u+x test-bin/*.sh
+  - autoscan
+  - aclocal
+  - autoheader
+  - libtoolize
+  - automake --add-missing
+  - autoconf
+  - popd
+  - mkdir -p build
+  - cd build
+  - ../src/configure CXXFLAGS="-std=c++11 -O3" --prefix=$EXEC_DIR --enable-lz4
+  - grep "HAVE_LZ4" config.h
+
+script:  
+  - make V=0 install -j3
+  - cp -R test-bin/ bin/ cgi-bin/ ../src
+  - export PATH=$PATH:$HOME/overpass/bin:$HOME/overpass/cgi-bin:$HOME/overpass/test-bin  
+  - cd ../osm-3s_testing
+  - ../src/test-bin/run_testsuite.sh 200
+
+branches:
+  only:
+    - test755
+
+os:
+  - linux
+  
+env:
+  - EXEC_DIR=$HOME/overpass
+
+
