@@ -300,6 +300,9 @@ std::vector< std::pair< Id_Type, Uint31_Index > > Query_Statement::collect_ids
     }
   }
 
+  sort(new_ids.begin(), new_ids.end());
+  new_ids.erase(unique(new_ids.begin(), new_ids.end()), new_ids.end());
+
   return new_ids;
 }
 
@@ -365,6 +368,9 @@ vector< Id_Type > Query_Statement::collect_ids
       rman.health_check(*this);
     }
   }
+
+  sort(new_ids.begin(), new_ids.end());
+  new_ids.erase(unique(new_ids.begin(), new_ids.end()), new_ids.end());
 
   return new_ids;
 }
